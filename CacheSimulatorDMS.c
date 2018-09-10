@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int logicalLog2(int x) //
+//Performs a logical logBASE2 on int argument and returns output
+int logicalLog2(int x) 
 {
 int count = 0;
 
@@ -15,7 +16,7 @@ count++;
 return count;
 }
 
-
+//Main
 int main(int argc, char *argv[])
 {
 FILE *traceFile;
