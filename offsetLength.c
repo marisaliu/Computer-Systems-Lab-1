@@ -2,6 +2,7 @@
 
 #define LINESIZE 32
 
+
 int logtwo();
 
 int main()
