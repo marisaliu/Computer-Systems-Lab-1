@@ -3,16 +3,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define ASSOCIATIVITY 2 //# of lines per set
-#define LINE 16 //size of lines in bytes
-#define CACHE 32 //size of cache in kbytes
-#define ADDRESS 32 //size in # of bits
+int setAssociative;
+int lineSize;
+int cacheSize;
 
 //Performs a logical logBASE2 on int argument and returns output
 int logicalLog2(int x) 
 {
   int count = 0;
-
   while(x > 1)
   {
     x = x/2;
@@ -24,17 +22,44 @@ int logicalLog2(int x)
 //Outputs the number of bits in the set index field of the address
 int setIndexLength()
 {
-  return logicalLog2((CACHE*1024)/(LINE*ASSOCIATIVITY)); //convert cache to bits first
+  return logicalLog2((cacheSize*1024)/(lineSize*setAssociative)); //convert cache to bits first
 }
 
-//Main
+//outputs the cache set in which the address falls
+int whichSet( int memAddress)
+{    
+  return (memAddress%((cacheSize*1024)/(lineSize*setAssociative)));
+}
+
 int main(int argc, char *argv[])
 {
-  FILE *traceFile;
-  char firstLine[8];
+  if(argc != 4)
+  {
+    printf("ERROR! WRONG NUMBER OF ARGUEMENTS. PLEASE INDICATE THE SET ASSOCIATIVITY, LINE SIZE, AND CACHE SIZE");
+  }
+  else
+  {
+    setAssociative = atoi(argv[1]);
+    lineSize = atoi(argv[2]);
+    cacheSize = atoi(argv[3]);
 
-  traceFile = fopen("traceFile.txt", "r");
-  fscanf(traceFile,"%[^\n]", firstLine);
-  printf(firstLine);
-  fclose(traceFile);
+   // printf("Set Associative %i \n", setAssociative);
+   // printf("Line Size: %i \n", lineSize);
+    //printf("Cache Size: %i \n", cacheSize);
+
+    FILE *traceFile;
+    char line[8];
+    traceFile = fopen("traceFile.txt", "r");
+    fscanf(traceFile,"%[^\n]", line);
+ 
+    long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
+    
+  //  printf("Memory Address: %i \n", memAddress);
+   // printf("Line in Hex %s \n", line);
+    
+    int setNum = whichSet(memAddress);
+  //  printf("Set Number: %i \n", setNum);
+    fclose(traceFile);
+
+  }
 }
