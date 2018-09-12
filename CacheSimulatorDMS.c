@@ -31,6 +31,11 @@ int whichSet( int memAddress)
   return (memAddress%((cacheSize*1024)/(lineSize*setAssociative)));
 }
 
+int offsetLength()
+{
+	return logicalLog2(lineSize);
+}
+
 int main(int argc, char *argv[])
 {
   if(argc != 4)
