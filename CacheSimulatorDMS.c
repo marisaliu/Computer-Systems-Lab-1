@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 int setAssociative;
 int lineSize;
 int cacheSize;
@@ -12,7 +11,6 @@ int cacheSize;
 int logicalLog2(int x) 
 {
   int count = 0;
-
   while(x > 1)
   {
     x = x/2;
@@ -21,6 +19,11 @@ int logicalLog2(int x)
   return count;
 }
 
+//Outputs the number of bits in the set index field of the address
+int setIndexLength()
+{
+  return logicalLog2((cacheSize*1024)/(lineSize*setAssociative)); //convert cache to bits first
+}
 
 //outputs the cache set in which the address falls
 int whichSet( int memAddress)
@@ -57,5 +60,6 @@ int main(int argc, char *argv[])
     int setNum = whichSet(memAddress);
   //  printf("Set Number: %i \n", setNum);
     fclose(traceFile);
+
   }
 }
