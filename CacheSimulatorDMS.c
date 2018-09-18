@@ -31,9 +31,22 @@ int whichSet( int memAddress)
   return (memAddress%((cacheSize*1024)/(lineSize*setAssociative)));
 }
 
+//Outputs the number of bits in the line offset field of the address.
 int offsetLength()
 {
 	return logicalLog2(lineSize);
+}
+
+//Outputs tag bits associated with the address
+int tagBits(int memAddress)
+{
+  int count = (setIndexLength()+offsetLength());
+  while(count>0)
+  {
+    memAddress = memAddress/2;
+    count--;
+  }
+  return memAddress;
 }
 
 int main(int argc, char *argv[])
