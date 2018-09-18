@@ -85,5 +85,4 @@ int main(int argc, char *argv[])
  tagSize = addressLength-setIndexLength()-offsetLength();
  printf("tagSize is %d", tagSize);
  //unsigned int **tagArray = malloc(tagSize);
-
 }
