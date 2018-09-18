@@ -6,6 +6,8 @@
 int setAssociative;
 int lineSize;
 int cacheSize;
+int addressLength;
+int tagSize;
 
 //Performs a logical logBASE2 on int argument and returns output
 int logicalLog2(int x) 
@@ -69,15 +71,19 @@ int main(int argc, char *argv[])
     char line[8];
     traceFile = fopen("traceFile.txt", "r");
     fscanf(traceFile,"%[^\n]", line);
- 
+   addressLength=strlen(line)*4;
     long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
     
   //  printf("Memory Address: %i \n", memAddress);
-   // printf("Line in Hex %s \n", line);
-    
+    printf("Line in Hex %s \n", line);
+  // printf("%d",addressLength); 
     int setNum = whichSet(memAddress);
   //  printf("Set Number: %i \n", setNum);
     fclose(traceFile);
 
   }
+ tagSize = addressLength-setIndexLength()-offsetLength();
+ printf("tagSize is %d", tagSize);
+ //unsigned int **tagArray = malloc(tagSize);
+
 }
