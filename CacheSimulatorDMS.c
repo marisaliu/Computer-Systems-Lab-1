@@ -9,6 +9,8 @@ int cacheSize;
 int addressLength;
 int tagLength;
 int numberSets;
+int **tagArray;
+int **lruArray;
 
 //Performs a logical logBASE2 on int argument and returns output
 int logicalLog2(int x) 
@@ -53,14 +55,22 @@ int tagBits(int memAddress)
 }
 
 /*If there is a hit, this outputs the cache way in which the accessed 
- * line can be found; it returns -1 if there is a cache miss */
-/*
-int hitWay(int memAddress)
+ * line can be found; it returns -1 if there is a cache miss 
+ * */
+int hitWay(int tagbits, int memAddress)
 {
   int setnum = whichSet(memAddress);
+  int lineCount;
+  for(lineCount = 0; lineCount < setAssociative; lineCount++)
+  {
+    if(tagbits == tagArray[setnum][lineCount])
+    {
+      return lineCount;
+    }
+  }
   return -1; 
 }
-*/
+
 
 //Updates the tagArray and lruArray upon a hit. This function is only called on a cache hit.
 /* Dylan
@@ -116,9 +126,19 @@ int main(int argc, char *argv[])
     fclose(traceFile);
 
     tagLength = addressLength-setIndexLength()-offsetLength();
-    //printf("tagSize is %d", tagSize);
-    unsigned int **tagArray = malloc(setAssociative*numberSets*sizeof(int));
-    unsigned int **lruArray = malloc(setAssociative*numberSets*sizeof(int));
+    //printf(tagSize is %d", tagSize);
+    int row;
+    tagArray = (int **)malloc(numberSets*sizeof(int *));
+    lruArray = (int **)malloc(numberSets*sizeof(int *));
+    for(row=0; row < numberSets; row++)
+    {
+      tagArray[row] = (int *)malloc(setAssociative*sizeof(int));
+      lruArray[row] = (int *)malloc(setAssociative*sizeof(int));
+    }
+    
+    int tagbits = tagBits(memAddress);
+    int hitOrMiss = hitWay(tagbits, memAddress);
+    printf("Hit or Miss: %i \n", hitOrMiss);
   }
 }
 
