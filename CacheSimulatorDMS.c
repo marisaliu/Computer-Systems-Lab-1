@@ -52,6 +52,29 @@ int tagBits(int memAddress)
   return memAddress;
 }
 
+/*If there is a hit, this outputs the cache way in which the accessed 
+ * line can be found; it returns -1 if there is a cache miss */
+/* Marisa
+int hitWay()
+{
+}
+*/
+
+//Updates the tagArray and lruArray upon a hit. This function is only called on a cache hit.
+/* Dylan
+void updateOnHit()
+{
+}
+*/
+
+//Updates the tagArray and lruArray upon a miss. This function is only called on a cache miss.
+/* Solomo
+void updateOnMiss()
+{
+}
+*/
+
+
 
 //////////////////////////////////////////////////////////
 /////////////////////Main Code////////////////////////////
