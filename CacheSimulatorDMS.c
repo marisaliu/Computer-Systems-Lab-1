@@ -54,9 +54,11 @@ int tagBits(int memAddress)
 
 /*If there is a hit, this outputs the cache way in which the accessed 
  * line can be found; it returns -1 if there is a cache miss */
-/* Marisa
-int hitWay()
+/*
+int hitWay(int memAddress)
 {
+  int setnum = whichSet(memAddress);
+  return -1; 
 }
 */
 
@@ -104,7 +106,6 @@ int main(int argc, char *argv[])
     long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
    
 
-    int setNum = whichSet(memAddress);
     /*
     printf("Memory Address: %i \n", memAddress);
     printf("Line in Hex %s \n", line);
@@ -116,8 +117,8 @@ int main(int argc, char *argv[])
 
     tagLength = addressLength-setIndexLength()-offsetLength();
     //printf("tagSize is %d", tagSize);
-    unsigned int **tagArray = malloc(sizeof(tagLength));
-    unsigned int **lruArray = malloc(sizeof(lineSize*numberSets));
+    unsigned int **tagArray = malloc(setAssociative*numberSets*sizeof(int));
+    unsigned int **lruArray = malloc(setAssociative*numberSets*sizeof(int));
   }
 }
 
