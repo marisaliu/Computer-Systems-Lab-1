@@ -9,6 +9,7 @@ int cacheSize;
 int addressLength;
 int tagLength;
 int numberSets;
+int setnum;
 int **tagArray;
 int **lruArray;
 
@@ -59,7 +60,7 @@ int tagBits(int memAddress)
  * */
 int hitWay(int tagbits, int memAddress)
 {
-  int setnum = whichSet(memAddress);
+  setnum = whichSet(memAddress);
   int lineCount;
   for(lineCount = 0; lineCount < setAssociative; lineCount++)
   {
@@ -73,11 +74,18 @@ int hitWay(int tagbits, int memAddress)
 
 
 //Updates the tagArray and lruArray upon a hit. This function is only called on a cache hit.
-/* Dylan
-void updateOnHit()
+void updateOnHit(int memAddress, int lineIndex)
 {
+  int lineCount;
+  for(lineCount=0; lineCount<setAssociative; lineCount++)
+  {
+    tagArray[lineCount]++;
+    if(lineCount=lineIndex)
+    {
+      tagArray[setnum]=0;
+    }
+  }
 }
-*/
 
 //Updates the tagArray and lruArray upon a miss. This function is only called on a cache miss.
 /* Solomo
@@ -138,7 +146,7 @@ int main(int argc, char *argv[])
     
     int tagbits = tagBits(memAddress);
     int hitOrMiss = hitWay(tagbits, memAddress);
-    printf("Hit or Miss: %i \n", hitOrMiss);
+    //printf("Hit or Miss: %i \n", hitOrMiss);
   }
 }
 
