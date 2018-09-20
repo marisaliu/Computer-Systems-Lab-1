@@ -7,7 +7,8 @@ int setAssociative;
 int lineSize;
 int cacheSize;
 int addressLength;
-int tagSize;
+int tagLength;
+int numberSets;
 
 //Performs a logical logBASE2 on int argument and returns output
 int logicalLog2(int x) 
@@ -24,19 +25,19 @@ int logicalLog2(int x)
 //Outputs the number of bits in the set index field of the address
 int setIndexLength()
 {
-  return logicalLog2((cacheSize*1024)/(lineSize*setAssociative)); //convert cache to bits first
+  return logicalLog2(numberSets); //convert cache to bits first
 }
 
 //outputs the cache set in which the address falls
 int whichSet( int memAddress)
 {    
-  return (memAddress%((cacheSize*1024)/(lineSize*setAssociative)));
+  return (memAddress%numberSets);
 }
 
 //Outputs the number of bits in the line offset field of the address.
 int offsetLength()
 {
-	return logicalLog2(lineSize);
+  return logicalLog2(lineSize);
 }
 
 //Outputs tag bits associated with the address
@@ -51,6 +52,10 @@ int tagBits(int memAddress)
   return memAddress;
 }
 
+
+//////////////////////////////////////////////////////////
+/////////////////////Main Code////////////////////////////
+//////////////////////////////////////////////////////////
 int main(int argc, char *argv[])
 {
   if(argc != 4)
@@ -62,27 +67,35 @@ int main(int argc, char *argv[])
     setAssociative = atoi(argv[1]);
     lineSize = atoi(argv[2]);
     cacheSize = atoi(argv[3]);
-
-   // printf("Set Associative %i \n", setAssociative);
-   // printf("Line Size: %i \n", lineSize);
-    //printf("Cache Size: %i \n", cacheSize);
-
+    numberSets = (cacheSize*1024)/(setAssociative*lineSize);
+/*
+    printf("Set Associative %i \n", setAssociative);
+    printf("Line Size: %i \n", lineSize);
+    printf("Cache Size: %i \n", cacheSize);
+*/
     FILE *traceFile;
-    char line[8];
+    char *line;
     traceFile = fopen("traceFile.txt", "r");
     fscanf(traceFile,"%[^\n]", line);
-   addressLength=strlen(line)*4;
+    addressLength=strlen(line)*4;
     long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
-    
-  //  printf("Memory Address: %i \n", memAddress);
-    printf("Line in Hex %s \n", line);
-  // printf("%d",addressLength); 
+   
+
     int setNum = whichSet(memAddress);
-  //  printf("Set Number: %i \n", setNum);
+    /*
+    printf("Memory Address: %i \n", memAddress);
+    printf("Line in Hex %s \n", line);
+    printf("%d",addressLength); 
+    printf("Set Number: %i \n", setNum);
+    */
+
     fclose(traceFile);
 
+    tagLength = addressLength-setIndexLength()-offsetLength();
+    //printf("tagSize is %d", tagSize);
+    unsigned int **tagArray = malloc(sizeof(tagLength));
+    unsigned int **lruArray = malloc(sizeof(lineSize*numberSets));
   }
- tagSize = addressLength-setIndexLength()-offsetLength();
- printf("tagSize is %d", tagSize);
- //unsigned int **tagArray = malloc(tagSize);
 }
+
+
