@@ -88,11 +88,11 @@ void updateOnHit(int memAddress, int lineIndex)
 }
 
 //Updates the tagArray and lruArray upon a miss. This function is only called on a cache miss.
-/* Solomo
 void updateOnMiss()
 {
+
 }
-*/
+
 
 
 
@@ -111,11 +111,11 @@ int main(int argc, char *argv[])
     lineSize = atoi(argv[2]);
     cacheSize = atoi(argv[3]);
     numberSets = (cacheSize*1024)/(setAssociative*lineSize);
-/*
+// /*
     printf("Set Associative %i \n", setAssociative);
     printf("Line Size: %i \n", lineSize);
     printf("Cache Size: %i \n", cacheSize);
-*/
+// */
     FILE *traceFile;
     char *line;
     traceFile = fopen("traceFile.txt", "r");
