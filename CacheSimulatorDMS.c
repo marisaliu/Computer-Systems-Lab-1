@@ -79,10 +79,10 @@ void updateOnHit(int memAddress, int lineIndex)
   int lineCount;
   for(lineCount=0; lineCount<setAssociative; lineCount++)
   {
-    lruArray[lineCount]++;
+    lruArray[setnum][lineCount]++;
     if(lineCount=lineIndex)
     {
-      lruArray[setnum]=0;
+      lruArray[setnum][lineCount]=0;
     }
   }
 }
