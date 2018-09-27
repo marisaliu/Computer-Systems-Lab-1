@@ -78,12 +78,9 @@ void updateOnHit(int memAddress, int lineIndex)
 {
   int lineCount;
   for(lineCount=0; lineCount<setAssociative; lineCount++)
-  {
-    lruArray[setnum][lineCount]++;
-    if(lineCount=lineIndex)
-    {
-      lruArray[setnum][lineCount]=0;
-    }
+  { 
+    if(lruArray[setnum][lineCount]!=-1){lruArray[setnum][lineCount]++;}
+    if(lineCount==lineIndex){lruArray[setnum][lineCount]=0;}
   }
 }
 
@@ -154,6 +151,10 @@ int main(int argc, char *argv[])
       lruArray[row] = (int *)malloc(setAssociative*sizeof(int));
     }
     
+    //initialize lruArray
+    int column;
+    for(row=0; row < numberSets; row++){
+      for(column=0; column < setAssociative; column++){lruArray[row][column]=-1;}}    
 
     FILE *traceFile;
     char *line;
