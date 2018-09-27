@@ -102,7 +102,7 @@ void updateOnMiss(int memAddress)
 	}
 	else
 	{
-	  lruArray[setnum][lineCount]=lruArray[lineCount]+1;
+	  lruArray[setnum][lineCount]=lruArray[setnum][lineCount]+1;
 	}
   }
   
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
     lineSize = atoi(argv[2]);
     cacheSize = atoi(argv[3]);
     numberSets = (cacheSize*1024)/(setAssociative*lineSize);
-// /*
+ /*
     printf("Set Associative %i \n", setAssociative);
     printf("Line Size: %i \n", lineSize);
     printf("Cache Size: %i \n", cacheSize);
@@ -154,7 +154,8 @@ int main(int argc, char *argv[])
     //initialize lruArray
     int column;
     for(row=0; row < numberSets; row++){
-      for(column=0; column < setAssociative; column++){lruArray[row][column]=-1;}}    
+      for(column=0; column < setAssociative; column++){lruArray[row][column]=-1;}
+    }    
 
     FILE *traceFile;
     char *line;
