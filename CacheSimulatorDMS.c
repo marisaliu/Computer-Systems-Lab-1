@@ -88,13 +88,42 @@ void updateOnHit(int memAddress, int lineIndex)
 }
 
 //Updates the tagArray and lruArray upon a miss. This function is only called on a cache miss.
-void updateOnMiss()
+void updateOnMiss(int memAddress)
 {
+  int setnum = whichSet(memAddress);
+  int lineCount;
+  int inTagArray=0;   //0 is false, 1 is true
+  
+  for(lineCount=0; lineCount<setAssociative; lineCount++)
+  {
+	if(tagArray[lineCount]==NULL)
+	{
+	  tagArray[setnum][lineCount]=tagBits(memAddress);
+	  lruArray[setnum][lineCount]=0;
+	  inTagArray=1;
+	  break;
+	}
+	else
+	{
+	  lruArray[setnum][lineCount]=lruArray[lineCount]+1;
+	}
+  }
+  
+  if(inTagArray==0){
+	//find index of address thats been there the longest
+    	int max=0;    //holds max lru time
+	int index=0;   //index of max lru time
+	for(int i=0; i < setAssociative; i++){
+	if(max < lruArray[setnum][i])
+	  max=lruArray[setnum][i];
+	 index=i;
+	}
+	//replace
+	tagArray[setnum][index]=tagBits(memAddress);
+	lruArray[setnum][index]=0;
+  }
 
 }
-
-
-
 
 //////////////////////////////////////////////////////////
 /////////////////////Main Code////////////////////////////
