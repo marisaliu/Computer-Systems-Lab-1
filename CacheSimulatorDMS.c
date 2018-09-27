@@ -116,25 +116,6 @@ int main(int argc, char *argv[])
     printf("Line Size: %i \n", lineSize);
     printf("Cache Size: %i \n", cacheSize);
 */
-    FILE *traceFile;
-    char *line;
-    traceFile = fopen("traceFile.txt", "r");
-    fscanf(traceFile,"%[^\n]", line);
-    addressLength=strlen(line)*4;
-    long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
-   
-
-    /*
-    printf("Memory Address: %i \n", memAddress);
-    printf("Line in Hex %s \n", line);
-    printf("%d",addressLength); 
-    printf("Set Number: %i \n", setNum);
-    */
-
-    fclose(traceFile);
-
-    tagLength = addressLength-setIndexLength()-offsetLength();
-    //printf(tagSize is %d", tagSize);
     int row;
     tagArray = (int **)malloc(numberSets*sizeof(int *));
     lruArray = (int **)malloc(numberSets*sizeof(int *));
@@ -144,10 +125,46 @@ int main(int argc, char *argv[])
       lruArray[row] = (int *)malloc(setAssociative*sizeof(int));
     }
     
+    FILE *traceFile;
+    char *line;
+    traceFile = fopen("traceFile.txt", "r");
+    
+    
+    
+    
+    
+
+
+    int count = 0;
+    while((count++ < 50)&& fscanf(traceFile, "%[^\n]\n",line) == 1)
+    {
+    
+    addressLength=strlen(line)*4;
+    long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
+   //printf("Count %i \n", count);
+
+    
+    //printf("Memory Address: %i \n", memAddress);
+    printf("Line in Hex %s \n", line);
+   // printf("%d",addressLength); 
+    //printf("Set Number: %i \n", setNum);
+    
+  
+    fclose(traceFile);
+
+    tagLength = addressLength-setIndexLength()-offsetLength();
+    //printf(tagSize is %d", tagSize);
+    
+    
     int tagbits = tagBits(memAddress);
     int hitOrMiss = hitWay(tagbits, memAddress);
     //printf("Hit or Miss: %i \n", hitOrMiss);
-  }
+    //newline = fscanf(traceFile, "%[^\n]", line);
+    }
+
+    
+    }
+
 }
 
 
