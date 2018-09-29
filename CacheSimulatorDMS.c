@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////GLOBAL VARIABLES////////////////////////////////
+///////////////////////////////////////////////////////////////////////
+
 int setAssociative;
 int lineSize;
 int cacheSize;
@@ -12,6 +17,11 @@ int numberSets;
 int setnum;
 int **tagArray;
 int **lruArray;
+
+
+///////////////////////////////////////////////////////////////////////
+///////////////////////////FUNCTIONS///////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 
 //Performs a logical logBASE2 on int argument and returns output
 int logicalLog2(int x) 
@@ -122,6 +132,9 @@ void updateOnMiss(int memAddress)
 
 }
 
+
+
+
 //////////////////////////////////////////////////////////
 /////////////////////Main Code////////////////////////////
 //////////////////////////////////////////////////////////
@@ -137,11 +150,8 @@ int main(int argc, char *argv[])
     lineSize = atoi(argv[2]);
     cacheSize = atoi(argv[3]);
     numberSets = (cacheSize*1024)/(setAssociative*lineSize);
- /*
-    printf("Set Associative %i \n", setAssociative);
-    printf("Line Size: %i \n", lineSize);
-    printf("Cache Size: %i \n", cacheSize);
-*/
+    
+    //Initialize the tagArray and lruArray
     int row;
     tagArray = (int **)malloc(numberSets*sizeof(int *));
     lruArray = (int **)malloc(numberSets*sizeof(int *));
@@ -151,20 +161,17 @@ int main(int argc, char *argv[])
       lruArray[row] = (int *)malloc(setAssociative*sizeof(int));
     }
     
-    //initialize lruArray
     int column;
     for(row=0; row < numberSets; row++){
       for(column=0; column < setAssociative; column++){lruArray[row][column]=-1;}
     }    
 
+    //Open trace file
     FILE *traceFile;
     char *line;
-    traceFile = fopen("traceFile.txt", "r");
-    
-    
-    
-    
+    traceFile = fopen("traceFile.txt", "r");    
    
+    //Loop to go through file to the last line
     int numberHits = 0;
     int numberMisses = 0;
     while(fscanf(traceFile, "%[^\n]\n",line) == 1)
@@ -197,6 +204,8 @@ int main(int argc, char *argv[])
     //newline = fscanf(traceFile, "%[^\n]", line);
       }
     }
+
+    //Print out the MissRate for the file
     printf("Number of Misses: %d \n", numberMisses);
     printf("Number of Hits: %d \n", numberHits);
     float missRate = (float) numberMisses/(numberMisses+numberHits);
