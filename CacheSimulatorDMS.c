@@ -4,6 +4,7 @@
 #include <string.h>
 #include <assert.h>
 
+
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////GLOBAL VARIABLES////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -129,7 +130,7 @@ void updateOnMiss(int memAddress)
 	  lruArray[setnum][lineCount]=lruArray[setnum][lineCount]+1;
 	}
   }
-  
+  //If set in tagArray is already full
   if(inTagArray==0){
 	//find index of address thats been there the longest
     	int max=0;    //holds max lru time
@@ -166,23 +167,8 @@ int main(int argc, char *argv[])
     cacheSize = atoi(argv[3]);
     fileName = argv[4];
     numberSets = (cacheSize*1024)/(setAssociative*lineSize);
-
-
-
-//    printf("Set Associative %i \n", setAssociative);
-  //  printf("Line Size: %i \n", lineSize);
-    //printf("Cache Size: %i \n", cacheSize);
-    
-
- /*
-    printf("Set Associative %i \n", setAssociative);
-    printf("Line Size: %i \n", lineSize);
-    printf("Cache Size: %i \n", cacheSize);
-*/
-
     
     //Initialize the tagArray and lruArray
-
     int row;
     tagArray = (int **)malloc(numberSets*sizeof(int *));
     lruArray = (int **)malloc(numberSets*sizeof(int *));
@@ -209,6 +195,7 @@ int main(int argc, char *argv[])
     {
     
       addressLength=strlen(line)*4;
+
       long int memAddress = strtol(line, NULL,16);  //converts hex string to int
 
     
@@ -221,10 +208,9 @@ int main(int argc, char *argv[])
     
     tagLength = addressLength-setIndexLength()-offsetLength();
 
+
+      long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
       tagLength = addressLength-setIndexLength()-offsetLength();
-    //printf(tagSize is %d", tagSize);
-    
-    
       int tagbits = tagBits(memAddress);
       int hitOrMiss = hitWay(tagbits, memAddress);
       if(hitOrMiss == -1){
@@ -234,15 +220,8 @@ int main(int argc, char *argv[])
       else{
         updateOnHit(memAddress,hitOrMiss);
         numberHits++;
-      //printf("Hit or Miss: %i \n", hitOrMiss);
-    //newline = fscanf(traceFile, "%[^\n]", line);
       }
     }
-
-
-fclose(traceFile);
-
-
 
     //Print out the MissRate for the file
     printf("Number of Misses: %d \n", numberMisses);
