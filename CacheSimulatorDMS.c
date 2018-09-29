@@ -138,10 +138,18 @@ int main(int argc, char *argv[])
     cacheSize = atoi(argv[3]);
     numberSets = (cacheSize*1024)/(setAssociative*lineSize);
 
+
 //    printf("Set Associative %i \n", setAssociative);
   //  printf("Line Size: %i \n", lineSize);
     //printf("Cache Size: %i \n", cacheSize);
     
+
+ /*
+    printf("Set Associative %i \n", setAssociative);
+    printf("Line Size: %i \n", lineSize);
+    printf("Cache Size: %i \n", cacheSize);
+*/
+
     int row;
     tagArray = (int **)malloc(numberSets*sizeof(int *));
     lruArray = (int **)malloc(numberSets*sizeof(int *));
@@ -154,7 +162,8 @@ int main(int argc, char *argv[])
     //initialize lruArray
     int column;
     for(row=0; row < numberSets; row++){
-      for(column=0; column < setAssociative; column++){lruArray[row][column]=-1;}}    
+      for(column=0; column < setAssociative; column++){lruArray[row][column]=-1;}
+    }    
 
     FILE *traceFile;
     char *line;
@@ -163,16 +172,14 @@ int main(int argc, char *argv[])
     
     
     
-    
-
-
-    int count = 0;
-    while((count++ < 50)&& fscanf(traceFile, "%[^\n]\n",line) == 1)
+   
+    int numberHits = 0;
+    int numberMisses = 0;
+    while(fscanf(traceFile, "%[^\n]\n",line) == 1)
     {
     
-    addressLength=strlen(line)*4;
-    long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
-   //printf("Count %i \n", count);
+      addressLength=strlen(line)*4;
+      long int memAddress = strtol(line, NULL,16);  //converts hex string to int
 
     
     //printf("Memory Address: %i \n", memAddress);
@@ -183,18 +190,35 @@ int main(int argc, char *argv[])
   
     
     tagLength = addressLength-setIndexLength()-offsetLength();
+
+      tagLength = addressLength-setIndexLength()-offsetLength();
     //printf(tagSize is %d", tagSize);
     
     
-    int tagbits = tagBits(memAddress);
-    int hitOrMiss = hitWay(tagbits, memAddress);
-    //printf("Hit or Miss: %i \n", hitOrMiss);
+      int tagbits = tagBits(memAddress);
+      int hitOrMiss = hitWay(tagbits, memAddress);
+      if(hitOrMiss == -1){
+        updateOnMiss(memAddress);
+        numberMisses++;
+      }
+      else{
+        updateOnHit(memAddress,hitOrMiss);
+        numberHits++;
+      //printf("Hit or Miss: %i \n", hitOrMiss);
     //newline = fscanf(traceFile, "%[^\n]", line);
+      }
     }
+
 fclose(traceFile);
 
+
+    printf("Number of Misses: %d \n", numberMisses);
+    printf("Number of Hits: %d \n", numberHits);
+    float missRate = (float) numberMisses/(numberMisses+numberHits);
+    printf("%f",missRate);
+    fclose(traceFile);
     
-    }
+  }
 
 }
 
