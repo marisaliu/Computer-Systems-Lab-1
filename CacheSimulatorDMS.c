@@ -12,6 +12,7 @@ int lineSize;
 int cacheSize;
 int addressLength;
 int tagLength;
+char *fileName;
 int numberSets;
 int setnum;
 int **tagArray;
@@ -139,7 +140,7 @@ void updateOnMiss(int memAddress)
 //////////////////////////////////////////////////////////
 int main(int argc, char *argv[])
 {
-  if(argc != 4)
+  if(argc != 5)
   {
     printf("ERROR! WRONG NUMBER OF ARGUEMENTS. PLEASE INDICATE THE SET ASSOCIATIVITY, LINE SIZE, AND CACHE SIZE");
   }
@@ -148,6 +149,7 @@ int main(int argc, char *argv[])
     setAssociative = atoi(argv[1]);
     lineSize = atoi(argv[2]);
     cacheSize = atoi(argv[3]);
+    fileName = argv[4];
     numberSets = (cacheSize*1024)/(setAssociative*lineSize);
 
 
@@ -183,7 +185,7 @@ int main(int argc, char *argv[])
     //Open trace file
     FILE *traceFile;
     char *line;
-    traceFile = fopen("traceFile.txt", "r");    
+    traceFile = fopen(fileName, "r");    
    
     //Loop to go through file to the last line
     int numberHits = 0;
@@ -196,7 +198,7 @@ int main(int argc, char *argv[])
 
     
     //printf("Memory Address: %i \n", memAddress);
-    printf("%s %s\n","Line in Hex", line);
+//    printf("%s %s\n","Line in Hex", line);
    // printf("%d",addressLength); 
     //printf("Set Number: %i \n", setNum);
   
@@ -231,7 +233,7 @@ fclose(traceFile);
     printf("Number of Misses: %d \n", numberMisses);
     printf("Number of Hits: %d \n", numberHits);
     float missRate = (float) numberMisses/(numberMisses+numberHits);
-    printf("%f",missRate);
+    printf("%s %d %d %d %f",fileName, cacheSize, setAssociative, lineSize, missRate);
     fclose(traceFile);
     
   }
