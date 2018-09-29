@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
     printf("%s %s\n","Line in Hex", line);
    // printf("%d",addressLength); 
     //printf("Set Number: %i \n", setNum);
-    
+  
   
     
     tagLength = addressLength-setIndexLength()-offsetLength();
