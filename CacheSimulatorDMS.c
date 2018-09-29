@@ -195,23 +195,18 @@ int main(int argc, char *argv[])
     {
     
       addressLength=strlen(line)*4;
-
-      long int memAddress = strtol(line, NULL,16);  //converts hex string to int
-
     
     //printf("Memory Address: %i \n", memAddress);
 //    printf("%s %s\n","Line in Hex", line);
    // printf("%d",addressLength); 
     //printf("Set Number: %i \n", setNum);
-  
-  
+   
+       long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
     
     tagLength = addressLength-setIndexLength()-offsetLength();
 
 
-      long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
-      tagLength = addressLength-setIndexLength()-offsetLength();
-      int tagbits = tagBits(memAddress);
+     int tagbits = tagBits(memAddress);
       int hitOrMiss = hitWay(tagbits, memAddress);
       if(hitOrMiss == -1){
         updateOnMiss(memAddress);
