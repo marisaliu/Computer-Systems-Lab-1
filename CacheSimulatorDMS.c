@@ -49,7 +49,7 @@ int setIndexLength()
 int whichSet( int memAddress)
 {    
   int set = memAddress%numberSets;
-  assert(set>0 && set<=numberSets);
+  assert(set>=0 && set<=numberSets);
   return set;
 }
 
