@@ -102,7 +102,7 @@ void updateOnMiss(int memAddress)
 	}
 	else
 	{
-	  lruArray[setnum][lineCount]=lruArray[lineCount]+1;
+	  lruArray[setnum][lineCount]=lruArray[setnum][lineCount]+1;
 	}
   }
   
@@ -137,11 +137,11 @@ int main(int argc, char *argv[])
     lineSize = atoi(argv[2]);
     cacheSize = atoi(argv[3]);
     numberSets = (cacheSize*1024)/(setAssociative*lineSize);
-// /*
-    printf("Set Associative %i \n", setAssociative);
-    printf("Line Size: %i \n", lineSize);
-    printf("Cache Size: %i \n", cacheSize);
-*/
+
+//    printf("Set Associative %i \n", setAssociative);
+  //  printf("Line Size: %i \n", lineSize);
+    //printf("Cache Size: %i \n", cacheSize);
+    
     int row;
     tagArray = (int **)malloc(numberSets*sizeof(int *));
     lruArray = (int **)malloc(numberSets*sizeof(int *));
@@ -176,13 +176,12 @@ int main(int argc, char *argv[])
 
     
     //printf("Memory Address: %i \n", memAddress);
-    printf("Line in Hex %s \n", line);
+    printf("%s %s\n","Line in Hex", line);
    // printf("%d",addressLength); 
     //printf("Set Number: %i \n", setNum);
     
   
-    fclose(traceFile);
-
+    
     tagLength = addressLength-setIndexLength()-offsetLength();
     //printf(tagSize is %d", tagSize);
     
@@ -192,6 +191,7 @@ int main(int argc, char *argv[])
     //printf("Hit or Miss: %i \n", hitOrMiss);
     //newline = fscanf(traceFile, "%[^\n]", line);
     }
+fclose(traceFile);
 
     
     }
