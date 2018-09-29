@@ -2,6 +2,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////GLOBAL VARIABLES////////////////////////////////
@@ -25,6 +26,7 @@ int **lruArray;
 //Performs a logical logBASE2 on int argument and returns output
 int logicalLog2(int x) 
 {
+  assert(x>0);
   int count = 0;
   while(x > 1)
   {
@@ -37,30 +39,38 @@ int logicalLog2(int x)
 //Outputs the number of bits in the set index field of the address
 int setIndexLength()
 {
-  return logicalLog2(numberSets); //convert cache to bits first
+  int length = logicalLog2(numberSets); //convert cache to bits first
+  assert(length<numberSets);
+  return length; 
 }
 
 //outputs the cache set in which the address falls
 int whichSet( int memAddress)
 {    
-  return (memAddress%numberSets);
+  int set = memAddress%numberSets;
+  assert(set>0 && set<=numberSets);
+  return set;
 }
 
 //Outputs the number of bits in the line offset field of the address.
 int offsetLength()
 {
-  return logicalLog2(lineSize);
+  int length = logicalLog2(lineSize);
+  assert(length<lineSize);
+  return length;
 }
 
 //Outputs tag bits associated with the address
 int tagBits(int memAddress)
 {
+  int initAddress = memAddress;
   int count = (setIndexLength()+offsetLength());
   while(count>0)
   {
     memAddress = memAddress/2;
     count--;
   }
+  assert(memAddress<=initAddress/2);
   return memAddress;
 }
 
@@ -69,6 +79,7 @@ int tagBits(int memAddress)
  * */
 int hitWay(int tagbits, int memAddress)
 {
+  assert(tagbits>0);
   setnum = whichSet(memAddress);
   int lineCount;
   for(lineCount = 0; lineCount < setAssociative; lineCount++)
@@ -85,6 +96,7 @@ int hitWay(int tagbits, int memAddress)
 //Updates the tagArray and lruArray upon a hit. This function is only called on a cache hit.
 void updateOnHit(int memAddress, int lineIndex)
 {
+  assert(lineIndex<setAssociative);
   int lineCount;
   for(lineCount=0; lineCount<setAssociative; lineCount++)
   { 
@@ -102,9 +114,11 @@ void updateOnMiss(int memAddress)
   
   for(lineCount=0; lineCount<setAssociative; lineCount++)
   {
-	if(tagArray[lineCount]==NULL)
+	if(lruArray[setnum][lineCount]==-1)
 	{
+	  int prevVal=tagArray[setnum][lineCount];
 	  tagArray[setnum][lineCount]=tagBits(memAddress);
+	  assert(prevVal!=tagArray[setnum][lineCount]);
 	  lruArray[setnum][lineCount]=0;
 	  inTagArray=1;
 	  break;
@@ -124,6 +138,7 @@ void updateOnMiss(int memAddress)
 	  max=lruArray[setnum][i];
 	 index=i;
 	}
+	assert(max>0);
 	//replace
 	tagArray[setnum][index]=tagBits(memAddress);
 	lruArray[setnum][index]=0;
