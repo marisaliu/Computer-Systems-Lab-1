@@ -113,12 +113,13 @@ void updateOnMiss(int memAddress)
   int setnum = whichSet(memAddress);
   int lineCount;
   int inTagArray=0;   //0 is false, 1 is true
-  
+  int prevVal;
+
   for(lineCount=0; lineCount<setAssociative; lineCount++)
   {
 	if(lruArray[setnum][lineCount]==-1)
 	{
-	  int prevVal=tagArray[setnum][lineCount];
+	  prevVal=tagArray[setnum][lineCount];
 	  tagArray[setnum][lineCount]=tagBits(memAddress);
 	  assert(prevVal!=tagArray[setnum][lineCount]);
 	  lruArray[setnum][lineCount]=0;
@@ -135,7 +136,8 @@ void updateOnMiss(int memAddress)
 	//find index of address thats been there the longest
     	int max=0;    //holds max lru time
 	int index=0;   //index of max lru time
-	for(int i=0; i < setAssociative; i++){
+	int i;
+	for(i=0; i < setAssociative; i++){
 	if(max < lruArray[setnum][i])
 	  max=lruArray[setnum][i];
 	 index=i;
@@ -147,7 +149,6 @@ void updateOnMiss(int memAddress)
   }
 
 }
-
 
 
 
@@ -222,7 +223,7 @@ int main(int argc, char *argv[])
     printf("Number of Misses: %d \n", numberMisses);
     printf("Number of Hits: %d \n", numberHits);
     float missRate = (float) numberMisses/(numberMisses+numberHits);
-    printf("%s %d %d %d %f",fileName, cacheSize, setAssociative, lineSize, missRate);
+    printf("%s %d %d %d %f \n",fileName, cacheSize, setAssociative, lineSize, missRate);
     fclose(traceFile);
     
   }
