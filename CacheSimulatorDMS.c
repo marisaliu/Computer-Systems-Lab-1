@@ -41,7 +41,7 @@ int logicalLog2(int x)
 //Outputs the number of bits in the set index field of the address
 int setIndexLength()
 {
-  int length = logicalLog2(numberSets); //convert cache to bits first
+  int length = (logicalLog2((cacheSize*1024)/lineSize))/setAssociative; //convert cache to bits first
   assert(length<numberSets);
   return length; 
 }
@@ -196,16 +196,16 @@ int main(int argc, char *argv[])
     {
     
       addressLength=strlen(line)*4;
-    
-    //printf("Memory Address: %i \n", memAddress);
-//    printf("%s %s\n","Line in Hex", line);
-   // printf("%d",addressLength); 
-    //printf("Set Number: %i \n", setNum);
-   
-       long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
+      
+    long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
     
     tagLength = addressLength-setIndexLength()-offsetLength();
 
+    //printf("Memory Address: %i \n", memAddress);
+   // printf("%s %s\n","Line in Hex", line);
+  //  printf("%d",addressLength); 
+ //   printf("Set Number: %i \n", setnum);
+ 
 
      int tagbits = tagBits(memAddress);
       int hitOrMiss = hitWay(tagbits, memAddress);
