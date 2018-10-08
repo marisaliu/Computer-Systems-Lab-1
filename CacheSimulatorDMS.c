@@ -157,12 +157,8 @@ void updateOnMiss(int memAddress)
 //////////////////////////////////////////////////////////
 int main(int argc, char *argv[])
 {
-  if(argc != 5)
-  {
-    printf("ERROR! WRONG NUMBER OF ARGUEMENTS. PLEASE INDICATE THE SET ASSOCIATIVITY, LINE SIZE, AND CACHE SIZE");
-  }
-  else
-  {
+  assert(argc == 5);
+    
     setAssociative = atoi(argv[1]);
     lineSize = atoi(argv[2]);
     cacheSize = atoi(argv[3]);
@@ -226,7 +222,6 @@ int main(int argc, char *argv[])
     printf("%s %d %d %d %f \n",fileName, cacheSize, setAssociative, lineSize, missRate);
     fclose(traceFile);
     
-  }
 
 }
 
