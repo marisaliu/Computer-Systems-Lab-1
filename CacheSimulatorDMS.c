@@ -42,7 +42,7 @@ int logicalLog2(int x)
 int setIndexLength()
 {
   int length = (logicalLog2((cacheSize*1024)/lineSize))/setAssociative; //convert cache to bits first
-  assert(length<numberSets);
+  assert(length<(cacheSize*1024)/lineSize);
   return length; 
 }
 
