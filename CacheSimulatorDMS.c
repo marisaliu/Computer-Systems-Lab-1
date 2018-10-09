@@ -18,8 +18,6 @@
 int setAssociative;
 int lineSize;
 int cacheSize;
-int addressLength;
-int tagLength;
 char *fileName;
 int numberSets;
 int setnum;
@@ -193,8 +191,7 @@ int main(int argc, char *argv[])
     int numberHits = 0;
     int numberMisses = 0;
     while(fscanf(traceFile, "%x",&line)!=EOF)
-    {        
-      tagLength = addressLength-setIndexLength()-offsetLength();
+     {        
       int tagbits = tagBits(line);
       int hitOrMiss = hitWay(tagbits, line);
       if(hitOrMiss == -1)
