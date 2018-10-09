@@ -1,3 +1,9 @@
+/////////////////////////////////////////////////////////////////////////
+////////////////////LAB 1 - CACHE SIMULATOR//////////////////////////////
+/////////////DYLAN BANH, MARISA LIU, SOLOMON WANG///////////////////////
+////////////////////////////////////////////////////////////////////////
+
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -179,45 +185,31 @@ int main(int argc, char *argv[])
     for(row=0; row < numberSets; row++){
       for(column=0; column < setAssociative; column++){lruArray[row][column]=-1;}
     }    
-
     //Open trace file
     FILE *traceFile;
-    char *line;
+    unsigned int line;
     traceFile = fopen(fileName, "r");    
-   
     //Loop to go through file to the last line
     int numberHits = 0;
     int numberMisses = 0;
-    while(fscanf(traceFile, "%[^\n]\n",line) == 1)
-    {
-    
-      addressLength=strlen(line)*4;
-      
-    long int memAddress = strtol(line, NULL,16);  //converts hex string to int 
-    
-    tagLength = addressLength-setIndexLength()-offsetLength();
-
-    //printf("Memory Address: %i \n", memAddress);
-   // printf("%s %s\n","Line in Hex", line);
-  //  printf("%d",addressLength); 
- //   printf("Set Number: %i \n", setnum);
- 
-
-     int tagbits = tagBits(memAddress);
-      int hitOrMiss = hitWay(tagbits, memAddress);
-      if(hitOrMiss == -1){
-        updateOnMiss(memAddress);
+    while(fscanf(traceFile, "%x",&line)!=EOF)
+    {        
+      tagLength = addressLength-setIndexLength()-offsetLength();
+      int tagbits = tagBits(line);
+      int hitOrMiss = hitWay(tagbits, line);
+      if(hitOrMiss == -1)
+      {
+        updateOnMiss(line);
         numberMisses++;
       }
-      else{
-        updateOnHit(memAddress,hitOrMiss);
+      else
+      {
+        updateOnHit(line, hitOrMiss);
         numberHits++;
       }
     }
 
     //Print out the MissRate for the file
-    printf("Number of Misses: %d \n", numberMisses);
-    printf("Number of Hits: %d \n", numberHits);
     float missRate = (float) numberMisses/(numberMisses+numberHits);
     printf("%s %d %d %d %f \n",fileName, cacheSize, setAssociative, lineSize, missRate);
     fclose(traceFile);
